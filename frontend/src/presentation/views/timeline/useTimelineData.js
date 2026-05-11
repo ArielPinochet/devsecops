@@ -2,8 +2,6 @@ import { computed, ref } from 'vue'
 import vulnService from '../../../application/services/vulnService'
 import { DAY_MS, HOUR_MS, alignHour, fmtDDMM, fmtHour, fmtYear } from './timelineFormatters'
 
-const LIMIT = 2000
-
 const startOfLocalDay = ms => {
   const date = new Date(ms)
   date.setHours(0, 0, 0, 0)
@@ -272,17 +270,10 @@ export default function useTimelineData({
 
   const fetchConnectionVulns = async () => {
     const response = await vulnService.getVulns({
-      connectionId: selectedConnection.value,
-      limit: LIMIT
+      connectionId: selectedConnection.value
     })
 
-    const data = Array.isArray(response.data) ? response.data : []
-
-    if (data.length >= LIMIT) {
-      warningMessage.value = `Se alcanzaron ${LIMIT} registros. El analisis puede estar truncado.`
-    }
-
-    return data
+    return Array.isArray(response.data) ? response.data : []
   }
 
   const resetBuildState = () => {
